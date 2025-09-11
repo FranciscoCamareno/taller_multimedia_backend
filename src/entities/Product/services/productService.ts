@@ -66,40 +66,41 @@ export class ProductService implements IProductServices {
     }
   };
 
+<<<<<<< HEAD
 post = async (data: TProduct): Promise<TProductEndpoint> => {
   try {
     const { sku, category_id, tax_id } = data;
 
     if (!tax_id) throw new Error("tax_id is required");
     if (!category_id) throw new Error("category_id is required");
+=======
+  post = async (data: TProduct): Promise<TProductEndpoint> => {
+    try {
+      const { sku } = data;
+      const exists = await Product.findOne({ where: { sku } });
+      if (exists) throw new Error("product already exists");
 
-    const exists = await Product.findOne({ where: { sku } });
-    if (exists) throw new Error("product already exists");
+      const product = await Product.create(data, {
+        include: [
+          {
+            model: Tax,
+            as: "tax",
+            attributes: ["name", "percentage", "description"],
+          },
+          {
+            model: Category,
+            as: "category",
+            attributes: ["name", "description"]
+          }
+        ],
+      });
+>>>>>>> parent of b0108b2 (change register status code response to 201)
 
-    const cat = await Category.findByPk(Number(category_id));
-    if (!cat) throw new Error("category not found");
-
-    const tax = await Tax.findByPk(Number(tax_id));
-    if (!tax) throw new Error("tax not found");
-
-    const created = await Product.create({
-      ...data,
-      category_id: Number(category_id),
-      tax_id: Number(tax_id),
-    });
-
-    const product = await Product.findByPk(created.id, {
-      include: [
-        { model: Tax, as: "tax", attributes: ["name", "percentage", "description"] },
-        { model: Category, as: "category", attributes: ["name", "description"] },
-      ],
-    });
-
-    return product ?? created;
-  } catch (error) {
-    throw error;
-  }
-};
+      return product;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   patch = async (id: number, data: TProduct): Promise<TProductEndpoint> => {
     try {
