@@ -30,7 +30,7 @@ const taxRouter = express.Router();
  *       404:
  *         description: No taxes found
  */
-taxRouter.get("/all", taxController.getAll);
+taxRouter.post("/all", taxController.getAll);
 
 /**
  * @openapi

@@ -10,7 +10,10 @@ import { sequelize } from "../../../../database/connection.js";
 class Tax extends Model<InferAttributes<Tax>, InferCreationAttributes<Tax>> {
   declare id: CreationOptional<number>;
   declare name: string;
+  declare category: string | null;
+  declare status: string | null;
   declare percentage: number;
+  declare exempt: boolean;
   declare description: string | null;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
@@ -28,9 +31,21 @@ Tax.init(
       allowNull: false,
       unique: true,
     },
-    percentage: {
-      type: DataTypes.DECIMAL(5, 2), 
+    category: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
+    status: {
+      type: DataTypes.STRING(100),
       allowNull: false,
+    },
+    percentage: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    exempt: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     description: {
       type: DataTypes.STRING(512),
