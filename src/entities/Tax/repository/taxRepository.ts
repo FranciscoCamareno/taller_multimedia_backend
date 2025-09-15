@@ -1,4 +1,4 @@
-import type { GetAllOptions } from "../../../domain/types/TGetAllOptions.js";
+import type { TGetAllOptions } from "../../../domain/types/TGetAllOptions.js";
 import type { ITaxRepository } from "../domain/interfaces/ITaxRepository.js";
 import type { TGetAllEnpoint } from "../domain/types/TGetAllEndpoint.js";
 import type { TTax } from "../domain/types/TTax.js";
@@ -28,7 +28,7 @@ export class TaxRepository implements ITaxRepository {
     }
   };
 
-  getAll = async (options: GetAllOptions): Promise<TGetAllEnpoint> => {
+  getAll = async (options: TGetAllOptions): Promise<TGetAllEnpoint> => {
     try {
       const roles = await this.taxService.getAll(options);
       if (!roles) {
@@ -52,9 +52,9 @@ export class TaxRepository implements ITaxRepository {
     }
   };
 
-  patch = async (id: number, data: TTax): Promise<TTaxEndpoint> => {
+  patch = async (data: TTax): Promise<TTaxEndpoint> => {
     try {
-      const role = await this.taxService.patch(id, data);
+      const role = await this.taxService.patch(data);
       if (!role) {
         throw new Error("error updating source");
       }

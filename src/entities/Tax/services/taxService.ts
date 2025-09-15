@@ -1,4 +1,4 @@
-import type { GetAllOptions } from "../../../domain/types/TGetAllOptions.js";
+import type { TGetAllOptions } from "../../../domain/types/TGetAllOptions.js";
 import type { ITaxServices } from "../domain/interfaces/ITaxServices.js";
 import Tax from "../domain/models/TaxModel.js";
 import type { TGetAllEnpoint } from "../domain/types/TGetAllEndpoint.js";
@@ -28,7 +28,7 @@ export class TaxService implements ITaxServices {
     }
   };
 
-  getAll = async (options: GetAllOptions): Promise<TGetAllEnpoint> => {
+  getAll = async (options: TGetAllOptions): Promise<TGetAllEnpoint> => {
     try {
       const {
         description,
@@ -72,9 +72,10 @@ export class TaxService implements ITaxServices {
     }
   };
 
-  patch = async (id: number, data: TTax): Promise<TTaxEndpoint> => {
+  patch = async (data: TTax): Promise<TTaxEndpoint> => {
     try {
-      const tax = await Tax.findByPk(id);
+      const { name } = data;
+      const tax = await Tax.findOne({ where: { name } });
       if (!tax) throw new Error("Tax not found");
 
       await tax.update(data);
