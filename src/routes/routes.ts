@@ -4,7 +4,6 @@ import usersRouter from "../entities/User/routes/userRoutes.js";
 import authRouter from "../entities/User/routes/authRoutes.js";
 import customerRouter from "../entities/CustomerAccount/routes/customerRoutes.js";
 import invoiceRouter from "../entities/Invoice/routes/invoiceRoutes.js";
-import invoiceDetailRouter from "../entities/InvoiceDetail/routes/invoiceDetailRoutes.js";
 import productRouter from "../entities/Product/routes/productRoutes.js";
 import rolesRouter from "../entities/Role/routes/roleRoutes.js";
 import swaggerSpec from "../lib/swagger.js";
@@ -25,18 +24,17 @@ router.get("/openapi.json", (req, res) => {
 });
 
 router.use("/auth", authRouter);
-router.use("/user", usersRouter);
-router.use("/customer", authMiddleware, verifyRole("employee"), customerRouter);
-router.use("/invoice", authMiddleware, verifyRole("employee"), invoiceRouter);
-router.use("/invoice/detail", authMiddleware, verifyRole("employee"), invoiceDetailRouter);
-router.use("/product", authMiddleware, verifyRole("employee"), productRouter);
-router.use("/product/tax", authMiddleware, verifyRole("employee"), taxRouter);
-router.use("/category", authMiddleware, verifyRole("employee"), categoryRouter);
-router.use("/role", authMiddleware, verifyRole("employee"), rolesRouter);
-router.use("/credit", authMiddleware, verifyRole("employee"), creditRouter);
-router.use("/credit/payment", authMiddleware, verifyRole("employee"), creditPaymentRouter);
+router.use("/user", authMiddleware, verifyRole(["admin", "employee"]), usersRouter);
+router.use("/customer", authMiddleware, verifyRole(["admin", "employee"]), customerRouter);
+router.use("/invoice", authMiddleware, verifyRole(["admin", "employee"]), invoiceRouter);
+router.use("/product", authMiddleware, verifyRole(["admin", "employee"]), productRouter);
+router.use("/product/tax", authMiddleware, verifyRole(["admin", "employee"]), taxRouter);
+router.use("/category", authMiddleware, verifyRole(["admin", "employee"]), categoryRouter);
+router.use("/role", authMiddleware, verifyRole(["admin", "employee"]), rolesRouter);
+router.use("/credit", authMiddleware, verifyRole(["admin", "employee"]), creditRouter);
+router.use("/credit/payment", authMiddleware, verifyRole(["admin", "employee"]), creditPaymentRouter);
 router.use("/admin/data", processDataRouter);
-router.use("/credit/status", authMiddleware, verifyRole("employee"), creditStatusRouter);
-router.use("/payment/method", authMiddleware, verifyRole("employee"), paymentMethodRouter);
+router.use("/credit/status", authMiddleware, verifyRole(["admin", "employee"]), creditStatusRouter);
+router.use("/payment/method", authMiddleware, verifyRole(["admin", "employee"]), paymentMethodRouter);
 
 export default router;
